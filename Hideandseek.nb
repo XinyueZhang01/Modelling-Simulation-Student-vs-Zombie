@@ -1,0 +1,895 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Wolfram 14.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       154,          7]
+NotebookDataLength[     39316,        887]
+NotebookOptionsPosition[     37741,        853]
+NotebookOutlinePosition[     38178,        870]
+CellTagsIndexPosition[     38135,        867]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Hide and seek", "Title",
+ CellChangeTimes->{{3.942741668757963*^9, 3.942741676970525*^9}, {
+   3.973592160765913*^9, 3.973592162970703*^9}, 3.974292406926227*^9, {
+   3.9744500480632553`*^9, 
+   3.9744500511147747`*^9}},ExpressionUUID->"d1ad6ba4-f57b-4596-bc28-\
+d00e48d9a50d"],
+
+Cell["\<\
+In this scenario, student hide by sheltering in place and venture out only \
+for essentials.\
+\>", "Subtitle",
+ CellChangeTimes->{{3.942647503066402*^9, 3.942647506367404*^9}, {
+  3.942742093311737*^9, 3.942742095035141*^9}, {3.974449995174465*^9, 
+  3.97445000344075*^9}, {3.974450123880419*^9, 
+  3.9744501458161182`*^9}},ExpressionUUID->"80faa2d1-17c8-4679-a3e3-\
+13b219300588"],
+
+Cell["\<\
+This interactive tool simulates the original H\[Dash]Z\[Dash]R system without \
+the starvation term, and for chosen parameters visualizes its time evolution, \
+reduced phase portraits, and local stability via the Jacobian \
+trace\[Dash]determinant plane.\
+\>", "Text",
+ CellChangeTimes->{{3.942742101732227*^9, 3.942742149577878*^9}, 
+   3.9427425564612913`*^9, {3.973592174482619*^9, 3.973592175210556*^9}, {
+   3.97444998101705*^9, 3.9744499827219086`*^9}, {3.974450181805567*^9, 
+   3.974450187539398*^9}},ExpressionUUID->"8bc687ed-1191-444f-ba64-\
+2d3628c7f229"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Manipulate", "[", "\n", " ", 
+   RowBox[{
+    RowBox[{"Module", "[", "\n", "  ", 
+     RowBox[{
+      RowBox[{"{", "\n", "   ", 
+       RowBox[{
+       "eqns", ",", " ", "sol", ",", " ", "H", ",", " ", "Z", ",", " ", "R", 
+        ",", " ", "t", ",", " ", "Hfunc", ",", " ", "Zfunc", ",", " ", 
+        "Rfunc", ",", "\n", "   ", "phasePlotHZ", ",", " ", "phasePlotZR", 
+        ",", " ", "jMatrix", ",", " ", "parameterSpace", ",", "\n", "   ", 
+        "detJ", ",", " ", "finalDetJ", ",", " ", "traceJ", ",", " ", 
+        "finalTraceJ", ",", "\n", "   ", "rFix", ",", " ", "hFix"}], "\n", 
+       "  ", "}"}], ",", "\n", "\n", "  ", 
+      RowBox[{"(*", " ", 
+       RowBox[{"Updated", " ", 
+        RowBox[{"system", ":", " ", 
+         RowBox[{"starvation", " ", "term", " ", "removed"}]}]}], " ", "*)"}],
+       "\n", "  ", 
+      RowBox[{
+       RowBox[{"eqns", " ", "=", " ", 
+        RowBox[{"{", "\n", "    ", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{"H", "'"}], "[", "t", "]"}], " ", "==", " ", 
+           RowBox[{
+            RowBox[{"-", 
+             RowBox[{"(", 
+              RowBox[{"1", " ", "-", " ", 
+               RowBox[{"R", "[", "t", "]"}]}], ")"}]}], " ", "*", " ", 
+            RowBox[{"Z", "[", "t", "]"}], " ", "*", " ", 
+            RowBox[{"H", "[", "t", "]"}]}]}], ",", "\n", "    ", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"Z", "'"}], "[", "t", "]"}], " ", "==", "  ", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"1", " ", "-", " ", 
+              RowBox[{"R", "[", "t", "]"}]}], ")"}], " ", "*", " ", 
+            RowBox[{"Z", "[", "t", "]"}], " ", "*", " ", 
+            RowBox[{"H", "[", "t", "]"}]}]}], ",", "\n", "    ", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"R", "'"}], "[", "t", "]"}], " ", "==", " ", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"c", "*", 
+               RowBox[{"(", 
+                RowBox[{"1", " ", "-", " ", 
+                 RowBox[{"R", "[", "t", "]"}]}], ")"}]}], " ", "-", " ", 
+              "gamma"}], ")"}], " ", "*", " ", 
+            RowBox[{"H", "[", "t", "]"}]}]}]}], "\n", "  ", "}"}]}], ";", 
+       "\n", "\n", "  ", 
+       RowBox[{"(*", " ", 
+        RowBox[{
+        "Updated", " ", "Jacobian", " ", "without", " ", "starvation", " ", 
+         "term"}], " ", "*)"}], "\n", "  ", 
+       RowBox[{"jMatrix", " ", "=", " ", 
+        RowBox[{"{", "\n", "    ", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"-", 
+              RowBox[{"(", 
+               RowBox[{"1", " ", "-", " ", "R"}], ")"}]}], " ", "Z"}], ",", 
+            "     ", 
+            RowBox[{
+             RowBox[{"-", 
+              RowBox[{"(", 
+               RowBox[{"1", " ", "-", " ", "R"}], ")"}]}], " ", "H"}], ",", 
+            "     ", 
+            RowBox[{"H", " ", "Z"}]}], "}"}], ",", "\n", "    ", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"1", " ", "-", " ", "R"}], ")"}], " ", "Z"}], ",", 
+            "       ", 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"1", " ", "-", " ", "R"}], ")"}], " ", "H"}], ",", 
+            "    ", 
+            RowBox[{
+             RowBox[{"-", "H"}], " ", "Z"}]}], "}"}], ",", "\n", "    ", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"c", " ", 
+              RowBox[{"(", 
+               RowBox[{"1", " ", "-", " ", "R"}], ")"}]}], " ", "-", " ", 
+             "gamma"}], ",", "   ", "0", ",", "        ", 
+            RowBox[{
+             RowBox[{"-", "c"}], " ", "H"}]}], "}"}]}], "\n", "  ", "}"}]}], 
+       ";", "\n", "\n", "  ", 
+       RowBox[{"(*", " ", 
+        RowBox[{"Bifurcation", " ", "parameter", " ", "space", " ", 
+         RowBox[{"(", "unchanged", ")"}]}], " ", "*)"}], "\n", "  ", 
+       RowBox[{"parameterSpace", " ", "=", "\n", "   ", 
+        RowBox[{"ParametricPlot", "[", "\n", "    ", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"d", ",", " ", "0"}], "}"}], ",", " ", 
+            RowBox[{"{", 
+             RowBox[{"0", ",", " ", "s"}], "}"}], ",", " ", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"s", "^", "2"}], "/", "4"}], ",", " ", "s"}], "}"}]}], 
+           "}"}], ",", "\n", "    ", 
+          RowBox[{"{", 
+           RowBox[{"d", ",", " ", 
+            RowBox[{"-", "10"}], ",", " ", "10"}], "}"}], ",", " ", 
+          RowBox[{"{", 
+           RowBox[{"s", ",", " ", 
+            RowBox[{"-", "10"}], ",", " ", "10"}], "}"}], ",", "\n", "    ", 
+          RowBox[{"PlotRange", " ", "->", " ", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"-", "10"}], ",", " ", "10"}], "}"}], ",", " ", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"-", "10"}], ",", " ", "10"}], "}"}]}], "}"}]}]}], 
+         "\n", "   ", "]"}]}], ";", "\n", "\n", "  ", 
+       RowBox[{"(*", " ", 
+        RowBox[{"Solve", " ", "ODE", " ", "system"}], " ", "*)"}], "\n", "  ", 
+       RowBox[{"sol", " ", "=", " ", 
+        RowBox[{"NDSolve", "[", "\n", "    ", 
+         RowBox[{
+          RowBox[{"{", "\n", "     ", 
+           RowBox[{"eqns", ",", "\n", "     ", 
+            RowBox[{
+             RowBox[{"H", "[", "0", "]"}], " ", "==", " ", "H0"}], ",", "\n", 
+            "     ", 
+            RowBox[{
+             RowBox[{"Z", "[", "0", "]"}], " ", "==", " ", "Z0"}], ",", "\n", 
+            "     ", 
+            RowBox[{
+             RowBox[{"R", "[", "0", "]"}], " ", "==", " ", "R0"}]}], "\n", 
+           "    ", "}"}], ",", "\n", "    ", 
+          RowBox[{"{", 
+           RowBox[{"H", ",", " ", "Z", ",", " ", "R"}], "}"}], ",", "\n", 
+          "    ", 
+          RowBox[{"{", 
+           RowBox[{"t", ",", " ", "0", ",", " ", "tmax"}], "}"}], ",", "\n", 
+          "    ", 
+          RowBox[{"Method", " ", "->", " ", 
+           RowBox[{"{", "\"\<StiffnessSwitching\>\"", "}"}]}], ",", "\n", 
+          "    ", 
+          RowBox[{"MaxSteps", " ", "->", " ", "Infinity"}]}], "\n", "  ", 
+         "]"}]}], ";", "\n", "\n", "  ", 
+       RowBox[{"Hfunc", " ", "=", " ", 
+        RowBox[{"H", " ", "/.", " ", 
+         RowBox[{"sol", "[", 
+          RowBox[{"[", "1", "]"}], "]"}]}]}], ";", "\n", "  ", 
+       RowBox[{"Zfunc", " ", "=", " ", 
+        RowBox[{"Z", " ", "/.", " ", 
+         RowBox[{"sol", "[", 
+          RowBox[{"[", "1", "]"}], "]"}]}]}], ";", "\n", "  ", 
+       RowBox[{"Rfunc", " ", "=", " ", 
+        RowBox[{"R", " ", "/.", " ", 
+         RowBox[{"sol", "[", 
+          RowBox[{"[", "1", "]"}], "]"}]}]}], ";", "\n", "\n", "  ", 
+       RowBox[{"hFix", " ", "=", " ", 
+        RowBox[{"Hfunc", "[", "tmax", "]"}]}], ";", "\n", "  ", 
+       RowBox[{"rFix", " ", "=", " ", 
+        RowBox[{"Rfunc", "[", "tmax", "]"}]}], ";", "\n", "\n", "  ", 
+       RowBox[{"traceJ", " ", "=", " ", 
+        RowBox[{"Tr", "[", "jMatrix", "]"}]}], ";", "\n", "  ", 
+       RowBox[{"detJ", " ", "=", " ", 
+        RowBox[{"Det", "[", "jMatrix", "]"}]}], ";", "\n", "\n", "  ", 
+       RowBox[{"finalTraceJ", " ", "=", " ", 
+        RowBox[{"traceJ", " ", "/.", " ", 
+         RowBox[{"{", "\n", "     ", 
+          RowBox[{
+           RowBox[{"H", " ", "->", " ", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"H", "[", "tmax", "]"}], " ", "/.", " ", 
+              RowBox[{"sol", "[", 
+               RowBox[{"[", "1", "]"}], "]"}]}], ")"}]}], ",", "\n", "     ", 
+           RowBox[{"Z", " ", "->", " ", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"Z", "[", "tmax", "]"}], " ", "/.", " ", 
+              RowBox[{"sol", "[", 
+               RowBox[{"[", "1", "]"}], "]"}]}], ")"}]}], ",", "\n", "     ", 
+           RowBox[{"R", " ", "->", " ", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"R", "[", "tmax", "]"}], " ", "/.", " ", 
+              RowBox[{"sol", "[", 
+               RowBox[{"[", "1", "]"}], "]"}]}], ")"}]}], ",", "\n", "     ", 
+           RowBox[{"c", " ", "->", " ", "c"}], ",", " ", 
+           RowBox[{"gamma", " ", "->", " ", "gamma"}]}], "\n", "    ", 
+          "}"}]}]}], ";", "\n", "\n", "  ", 
+       RowBox[{"finalDetJ", " ", "=", " ", 
+        RowBox[{"detJ", " ", "/.", " ", 
+         RowBox[{"{", "\n", "     ", 
+          RowBox[{
+           RowBox[{"H", " ", "->", " ", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"H", "[", "tmax", "]"}], " ", "/.", " ", 
+              RowBox[{"sol", "[", 
+               RowBox[{"[", "1", "]"}], "]"}]}], ")"}]}], ",", "\n", "     ", 
+           RowBox[{"Z", " ", "->", " ", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"Z", "[", "tmax", "]"}], " ", "/.", " ", 
+              RowBox[{"sol", "[", 
+               RowBox[{"[", "1", "]"}], "]"}]}], ")"}]}], ",", "\n", "     ", 
+           RowBox[{"R", " ", "->", " ", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"R", "[", "tmax", "]"}], " ", "/.", " ", 
+              RowBox[{"sol", "[", 
+               RowBox[{"[", "1", "]"}], "]"}]}], ")"}]}], ",", "\n", "     ", 
+           RowBox[{"c", " ", "->", " ", "c"}], ",", " ", 
+           RowBox[{"gamma", " ", "->", " ", "gamma"}]}], "\n", "    ", 
+          "}"}]}]}], ";", "\n", "\n", "  ", 
+       RowBox[{"(*", " ", 
+        RowBox[{"H", "-", 
+         RowBox[{"Z", " ", "stream", " ", "plot", " ", 
+          RowBox[{"(", 
+           RowBox[{"R", " ", "fixed"}], ")"}]}]}], " ", "*)"}], "\n", "  ", 
+       RowBox[{"phasePlotHZ", " ", "=", "\n", "   ", 
+        RowBox[{"StreamPlot", "[", "\n", "    ", 
+         RowBox[{
+          RowBox[{"Evaluate", "[", 
+           RowBox[{"{", "\n", "      ", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"-", 
+               RowBox[{"(", 
+                RowBox[{"1", " ", "-", " ", "rFix"}], ")"}]}], " ", "Z", " ", 
+              "H"}], ",", "\n", "       ", 
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{"1", " ", "-", " ", "rFix"}], ")"}], " ", "Z", " ", 
+              "H"}]}], "\n", "    ", "}"}], "]"}], ",", "\n", "    ", 
+          RowBox[{"{", 
+           RowBox[{"H", ",", " ", "0", ",", " ", "hMaxPlot"}], "}"}], ",", 
+          " ", 
+          RowBox[{"{", 
+           RowBox[{"Z", ",", " ", "0", ",", " ", "zMaxPlot"}], "}"}], ",", 
+          "\n", "    ", 
+          RowBox[{"StreamStyle", " ", "->", " ", 
+           RowBox[{"Directive", "[", 
+            RowBox[{
+             RowBox[{"Arrowheads", "[", "0.02", "]"}], ",", " ", "Gray"}], 
+            "]"}]}], ",", "\n", "    ", 
+          RowBox[{"StreamScale", " ", "->", " ", "Medium"}], ",", "\n", 
+          "    ", 
+          RowBox[{"Frame", " ", "->", " ", "True"}], ",", "\n", "    ", 
+          RowBox[{"FrameLabel", " ", "->", " ", 
+           RowBox[{"{", 
+            RowBox[{"\"\<H\>\"", ",", " ", "\"\<Z\>\""}], "}"}]}]}], "\n", 
+         "   ", "]"}]}], ";", "\n", "\n", "  ", 
+       RowBox[{"(*", " ", 
+        RowBox[{"Z", "-", 
+         RowBox[{"R", " ", "stream", " ", "plot", " ", 
+          RowBox[{"(", 
+           RowBox[{"H", " ", "fixed"}], ")"}]}]}], " ", "*)"}], "\n", "  ", 
+       RowBox[{"phasePlotZR", " ", "=", "\n", "   ", 
+        RowBox[{"StreamPlot", "[", "\n", "    ", 
+         RowBox[{
+          RowBox[{"Evaluate", "[", 
+           RowBox[{"{", "\n", "      ", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{"1", " ", "-", " ", "R"}], ")"}], " ", "Z", " ", 
+              "hFix"}], ",", "\n", "      ", 
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{"c", "*", 
+                 RowBox[{"(", 
+                  RowBox[{"1", " ", "-", " ", "R"}], ")"}]}], " ", "-", " ", 
+                "gamma"}], ")"}], " ", "hFix"}]}], "\n", "    ", "}"}], "]"}],
+           ",", "\n", "    ", 
+          RowBox[{"{", 
+           RowBox[{"Z", ",", " ", "0", ",", " ", "zMaxPlot"}], "}"}], ",", 
+          " ", 
+          RowBox[{"{", 
+           RowBox[{"R", ",", " ", "0", ",", " ", "rMaxPlot"}], "}"}], ",", 
+          "\n", "    ", 
+          RowBox[{"StreamStyle", " ", "->", " ", 
+           RowBox[{"Directive", "[", 
+            RowBox[{
+             RowBox[{"Arrowheads", "[", "0.02", "]"}], ",", " ", "Gray"}], 
+            "]"}]}], ",", "\n", "    ", 
+          RowBox[{"StreamScale", " ", "->", " ", "Medium"}], ",", "\n", 
+          "    ", 
+          RowBox[{"Frame", " ", "->", " ", "True"}], ",", "\n", "    ", 
+          RowBox[{"FrameLabel", " ", "->", " ", 
+           RowBox[{"{", 
+            RowBox[{"\"\<Z\>\"", ",", " ", "\"\<R\>\""}], "}"}]}]}], "\n", 
+         "   ", "]"}]}], ";", "\n", "\n", "  ", 
+       RowBox[{"Column", "[", 
+        RowBox[{"{", "\n", "    ", 
+         RowBox[{
+          RowBox[{"Plot", "[", "\n", "     ", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"Hfunc", "[", "t", "]"}], ",", " ", 
+              RowBox[{"Zfunc", "[", "t", "]"}], ",", " ", 
+              RowBox[{"Rfunc", "[", "t", "]"}]}], "}"}], ",", "\n", "     ", 
+            RowBox[{"{", 
+             RowBox[{"t", ",", " ", "0", ",", " ", "tmax"}], "}"}], ",", "\n",
+             "     ", 
+            RowBox[{"PlotRange", " ", "->", " ", "All"}], ",", "\n", "     ", 
+            RowBox[{"PlotLegends", " ", "->", " ", 
+             RowBox[{"{", 
+              RowBox[{
+              "\"\<H\>\"", ",", " ", "\"\<Z\>\"", ",", " ", "\"\<R\>\""}], 
+              "}"}]}], ",", "\n", "     ", 
+            RowBox[{"PlotStyle", " ", "->", " ", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"Blue", ",", " ", "Thick"}], "}"}], ",", " ", 
+               RowBox[{"{", 
+                RowBox[{"Red", ",", " ", "Thick"}], "}"}], ",", " ", 
+               RowBox[{"{", 
+                RowBox[{"Purple", ",", " ", "Thick"}], "}"}]}], "}"}]}], ",", 
+            "\n", "     ", 
+            RowBox[{"Frame", " ", "->", " ", "True"}], ",", "\n", "     ", 
+            RowBox[{"FrameLabel", " ", "->", " ", 
+             RowBox[{"{", 
+              RowBox[{"\"\<t\>\"", ",", " ", "\"\<H, Z, R\>\""}], "}"}]}]}], 
+           "\n", "    ", "]"}], ",", "\n", "    ", "phasePlotHZ", ",", "\n", 
+          "    ", "phasePlotZR", ",", "\n", "    ", 
+          RowBox[{"Show", "[", "\n", "     ", 
+           RowBox[{"parameterSpace", ",", "\n", "     ", 
+            RowBox[{"ListPlot", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"{", 
+                RowBox[{"finalDetJ", ",", " ", "finalTraceJ"}], "}"}], "}"}], 
+              ",", " ", 
+              RowBox[{"PlotStyle", " ", "->", " ", 
+               RowBox[{"PointSize", "[", "Large", "]"}]}]}], "]"}], ",", "\n",
+             "     ", 
+            RowBox[{"Frame", " ", "->", " ", "True"}], ",", "\n", "     ", 
+            RowBox[{"FrameLabel", " ", "->", " ", 
+             RowBox[{"{", 
+              RowBox[{"\"\<Determinant\>\"", ",", " ", "\"\<Trace\>\""}], 
+              "}"}]}]}], "\n", "    ", "]"}]}], "\n", "   ", "}"}], "]"}]}]}],
+      "\n", " ", "]"}], ",", "\n", "\n", " ", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"c", ",", " ", "1.0", ",", " ", "\"\<c\>\""}], "}"}], ",", " ",
+       "0", ",", " ", "5", ",", " ", "0.01"}], "}"}], ",", "\n", " ", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"gamma", ",", " ", "0.5", ",", " ", "\"\<gamma\>\""}], "}"}], 
+      ",", " ", "0", ",", " ", "5", ",", " ", "0.01"}], "}"}], ",", "\n", 
+    "\n", " ", "Delimiter", ",", "\n", " ", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"H0", ",", " ", "1", ",", " ", "\"\<H0\>\""}], "}"}], ",", " ",
+       "0", ",", " ", "10", ",", " ", "0.1"}], "}"}], ",", "\n", " ", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"Z0", ",", " ", "0.2", ",", " ", "\"\<Z0\>\""}], "}"}], ",", 
+      " ", "0", ",", " ", "10", ",", " ", "0.1"}], "}"}], ",", "\n", " ", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"R0", ",", " ", "0.5", ",", " ", "\"\<R0\>\""}], "}"}], ",", 
+      " ", "0", ",", " ", "1", ",", " ", "0.01"}], "}"}], ",", "\n", "\n", 
+    " ", "Delimiter", ",", "\n", " ", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"tmax", ",", " ", "50", ",", " ", "\"\<tmax\>\""}], "}"}], ",",
+       " ", "1", ",", " ", "500", ",", " ", "1"}], "}"}], ",", "\n", "\n", 
+    " ", "Delimiter", ",", "\n", " ", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"hMaxPlot", ",", " ", "2", ",", " ", "\"\<H plot max\>\""}], 
+       "}"}], ",", " ", "0.1", ",", " ", "10", ",", " ", "0.1"}], "}"}], ",", 
+    "\n", " ", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"zMaxPlot", ",", " ", "2", ",", " ", "\"\<Z plot max\>\""}], 
+       "}"}], ",", " ", "0.1", ",", " ", "10", ",", " ", "0.1"}], "}"}], ",", 
+    "\n", " ", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"rMaxPlot", ",", " ", "1", ",", " ", "\"\<R plot max\>\""}], 
+       "}"}], ",", " ", "0.1", ",", " ", "2", ",", " ", "0.01"}], "}"}]}], 
+   "\n", "]"}], "\n", "\n", "\n"}]], "Code",
+ CellChangeTimes->{{3.942568861749254*^9, 3.9425689661309423`*^9}, {
+   3.942569415885689*^9, 3.942569418708898*^9}, {3.942569533947555*^9, 
+   3.942569544365508*^9}, {3.942569606385242*^9, 3.942569614701667*^9}, {
+   3.9425701736126537`*^9, 3.942570174617716*^9}, {3.942570543206863*^9, 
+   3.9425705597448797`*^9}, {3.942571147765177*^9, 3.94257114795545*^9}, {
+   3.942571334675982*^9, 3.942571334875091*^9}, {3.942571600983206*^9, 
+   3.942571612555653*^9}, {3.942573342082456*^9, 3.942573350207308*^9}, {
+   3.942577931444213*^9, 3.942577938266357*^9}, {3.9425780690034227`*^9, 
+   3.942578088517001*^9}, {3.942578144307881*^9, 3.942578160063051*^9}, {
+   3.942598619634856*^9, 3.9425986245346107`*^9}, {3.942601724397453*^9, 
+   3.942601763450631*^9}, {3.942603630621044*^9, 3.942603694559592*^9}, {
+   3.942603751855053*^9, 3.942603769595958*^9}, {3.942639667256469*^9, 
+   3.94263970189471*^9}, {3.942639754712583*^9, 3.942639765847437*^9}, {
+   3.942639828268923*^9, 3.942639865206245*^9}, {3.942646488318959*^9, 
+   3.942646545516347*^9}, {3.94264672909389*^9, 3.942646730164738*^9}, {
+   3.942647536496777*^9, 3.942647595831606*^9}, {3.942654962342984*^9, 
+   3.942654962884716*^9}, {3.942723072866667*^9, 3.94272309898648*^9}, {
+   3.942723405216133*^9, 3.942723476916054*^9}, {3.94272360853557*^9, 
+   3.942723696897449*^9}, {3.942724138398032*^9, 3.942724149760382*^9}, {
+   3.942741836265483*^9, 3.942741837014011*^9}, {3.942741973307456*^9, 
+   3.9427420084877453`*^9}, {3.942742157736017*^9, 3.942742165945363*^9}, {
+   3.9427424472269783`*^9, 3.9427424749448605`*^9}, {3.972896786906613*^9, 
+   3.972896787975708*^9}, 3.973506384645314*^9, 3.973506546636236*^9, {
+   3.9735069110079556`*^9, 3.973506912119488*^9}, {3.974293058397679*^9, 
+   3.9742930603154945`*^9}, {3.974296244715996*^9, 3.974296245312817*^9}, {
+   3.974296471178762*^9, 3.974296471674034*^9}, {3.97429715097302*^9, 
+   3.974297185185539*^9}},
+ CellLabel->"In[17]:=",ExpressionUUID->"a54f7314-71ab-4641-8904-2e99c7a8588b"],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`c$$ = 1, $CellContext`gamma$$ = 
+    5, $CellContext`H0$$ = 1, $CellContext`hMaxPlot$$ = 2, $CellContext`R0$$ =
+     0.5, $CellContext`rMaxPlot$$ = 1, $CellContext`tmax$$ = 
+    50, $CellContext`Z0$$ = 0.2, $CellContext`zMaxPlot$$ = 2, Typeset`show$$ =
+     True, Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"untitled\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`c$$], 1., "c"}, 0, 5, 0.01, ControlType -> 
+      Manipulator}, {{
+       Hold[$CellContext`gamma$$], 0.5, "gamma"}, 0, 5, 0.01, ControlType -> 
+      Manipulator}, {{
+       Hold[$CellContext`H0$$], 1, "H0"}, 0, 10, 0.1, ControlType -> 
+      Manipulator}, {{
+       Hold[$CellContext`Z0$$], 0.2, "Z0"}, 0, 10, 0.1, ControlType -> 
+      Manipulator}, {{
+       Hold[$CellContext`R0$$], 0.5, "R0"}, 0, 1, 0.01, ControlType -> 
+      Manipulator}, {{
+       Hold[$CellContext`tmax$$], 50, "tmax"}, 1, 500, 1, ControlType -> 
+      Manipulator}, {{
+       Hold[$CellContext`hMaxPlot$$], 2, "H plot max"}, 0.1, 10, 0.1, 
+      ControlType -> Manipulator}, {{
+       Hold[$CellContext`zMaxPlot$$], 2, "Z plot max"}, 0.1, 10, 0.1, 
+      ControlType -> Manipulator}, {{
+       Hold[$CellContext`rMaxPlot$$], 1, "R plot max"}, 0.1, 2, 0.01, 
+      ControlType -> Manipulator}}, Typeset`size$$ = {
+    231.2, {327.8212411425309, 333.55317494652695`}}, Typeset`update$$ = 0, 
+    Typeset`initDone$$, Typeset`skipInitDone$$ = True}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`c$$ = 1., $CellContext`gamma$$ = 
+        0.5, $CellContext`H0$$ = 1, $CellContext`hMaxPlot$$ = 
+        2, $CellContext`R0$$ = 0.5, $CellContext`rMaxPlot$$ = 
+        1, $CellContext`tmax$$ = 50, $CellContext`Z0$$ = 
+        0.2, $CellContext`zMaxPlot$$ = 2}, "ControllerVariables" :> {}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> 
+      Module[{$CellContext`eqns$, $CellContext`sol$, $CellContext`H$, \
+$CellContext`Z$, $CellContext`R$, $CellContext`t$, $CellContext`Hfunc$, \
+$CellContext`Zfunc$, $CellContext`Rfunc$, $CellContext`phasePlotHZ$, \
+$CellContext`phasePlotZR$, $CellContext`jMatrix$, \
+$CellContext`parameterSpace$, $CellContext`detJ$, $CellContext`finalDetJ$, \
+$CellContext`traceJ$, $CellContext`finalTraceJ$, $CellContext`rFix$, \
+$CellContext`hFix$}, $CellContext`eqns$ = {
+          Derivative[
+            1][$CellContext`H$][$CellContext`t$] == (-(
+              1 - $CellContext`R$[$CellContext`t$])) \
+$CellContext`Z$[$CellContext`t$] $CellContext`H$[$CellContext`t$], 
+           Derivative[
+            1][$CellContext`Z$][$CellContext`t$] == (
+             1 - $CellContext`R$[$CellContext`t$]) \
+$CellContext`Z$[$CellContext`t$] $CellContext`H$[$CellContext`t$], 
+           Derivative[
+            1][$CellContext`R$][$CellContext`t$] == ($CellContext`c$$ (
+               1 - $CellContext`R$[$CellContext`t$]) - $CellContext`gamma$$) \
+$CellContext`H$[$CellContext`t$]}; $CellContext`jMatrix$ = {{(-(
+              1 - $CellContext`R$)) $CellContext`Z$, (-(
+              1 - $CellContext`R$)) $CellContext`H$, $CellContext`H$ \
+$CellContext`Z$}, {(1 - $CellContext`R$) $CellContext`Z$, (
+             1 - $CellContext`R$) $CellContext`H$, (-$CellContext`H$) \
+$CellContext`Z$}, {$CellContext`c$$ (
+              1 - $CellContext`R$) - $CellContext`gamma$$, 
+            0, (-$CellContext`c$$) $CellContext`H$}}; \
+$CellContext`parameterSpace$ = 
+         ParametricPlot[{{$CellContext`d, 0}, {
+            0, $CellContext`s}, {$CellContext`s^2/
+             4, $CellContext`s}}, {$CellContext`d, -10, 
+            10}, {$CellContext`s, -10, 10}, 
+           PlotRange -> {{-10, 10}, {-10, 10}}]; $CellContext`sol$ = 
+         NDSolve[{$CellContext`eqns$, $CellContext`H$[
+             0] == $CellContext`H0$$, $CellContext`Z$[
+             0] == $CellContext`Z0$$, $CellContext`R$[
+             0] == $CellContext`R0$$}, {$CellContext`H$, $CellContext`Z$, \
+$CellContext`R$}, {$CellContext`t$, 0, $CellContext`tmax$$}, 
+           Method -> {"StiffnessSwitching"}, MaxSteps -> 
+           Infinity]; $CellContext`Hfunc$ = ReplaceAll[$CellContext`H$, 
+           Part[$CellContext`sol$, 1]]; $CellContext`Zfunc$ = 
+         ReplaceAll[$CellContext`Z$, 
+           Part[$CellContext`sol$, 1]]; $CellContext`Rfunc$ = 
+         ReplaceAll[$CellContext`R$, 
+           
+           Part[$CellContext`sol$, 
+            1]]; $CellContext`hFix$ = \
+$CellContext`Hfunc$[$CellContext`tmax$$]; $CellContext`rFix$ = \
+$CellContext`Rfunc$[$CellContext`tmax$$]; $CellContext`traceJ$ = 
+         Tr[$CellContext`jMatrix$]; $CellContext`detJ$ = 
+         Det[$CellContext`jMatrix$]; $CellContext`finalTraceJ$ = 
+         ReplaceAll[$CellContext`traceJ$, {$CellContext`H$ -> ReplaceAll[
+              $CellContext`H$[$CellContext`tmax$$], 
+              Part[$CellContext`sol$, 1]], $CellContext`Z$ -> ReplaceAll[
+              $CellContext`Z$[$CellContext`tmax$$], 
+              Part[$CellContext`sol$, 1]], $CellContext`R$ -> ReplaceAll[
+              $CellContext`R$[$CellContext`tmax$$], 
+              
+              Part[$CellContext`sol$, 
+               1]], $CellContext`c$$ -> $CellContext`c$$, \
+$CellContext`gamma$$ -> $CellContext`gamma$$}]; $CellContext`finalDetJ$ = 
+         ReplaceAll[$CellContext`detJ$, {$CellContext`H$ -> ReplaceAll[
+              $CellContext`H$[$CellContext`tmax$$], 
+              Part[$CellContext`sol$, 1]], $CellContext`Z$ -> ReplaceAll[
+              $CellContext`Z$[$CellContext`tmax$$], 
+              Part[$CellContext`sol$, 1]], $CellContext`R$ -> ReplaceAll[
+              $CellContext`R$[$CellContext`tmax$$], 
+              
+              Part[$CellContext`sol$, 
+               1]], $CellContext`c$$ -> $CellContext`c$$, \
+$CellContext`gamma$$ -> $CellContext`gamma$$}]; $CellContext`phasePlotHZ$ = 
+         StreamPlot[
+           
+           Evaluate[{(-(
+               1 - $CellContext`rFix$)) $CellContext`Z$ $CellContext`H$, (
+              1 - $CellContext`rFix$) $CellContext`Z$ $CellContext`H$}], \
+{$CellContext`H$, 0, $CellContext`hMaxPlot$$}, {$CellContext`Z$, 
+            0, $CellContext`zMaxPlot$$}, StreamStyle -> Directive[
+             Arrowheads[0.02], Gray], StreamScale -> Medium, Frame -> True, 
+           FrameLabel -> {"H", "Z"}]; $CellContext`phasePlotZR$ = StreamPlot[
+           
+           Evaluate[{(
+              1 - $CellContext`R$) $CellContext`Z$ $CellContext`hFix$, \
+($CellContext`c$$ (
+                1 - $CellContext`R$) - $CellContext`gamma$$) \
+$CellContext`hFix$}], {$CellContext`Z$, 
+            0, $CellContext`zMaxPlot$$}, {$CellContext`R$, 
+            0, $CellContext`rMaxPlot$$}, StreamStyle -> Directive[
+             Arrowheads[0.02], Gray], StreamScale -> Medium, Frame -> True, 
+           FrameLabel -> {"Z", "R"}]; Column[{
+           Plot[{
+             $CellContext`Hfunc$[$CellContext`t$], 
+             $CellContext`Zfunc$[$CellContext`t$], 
+             $CellContext`Rfunc$[$CellContext`t$]}, {$CellContext`t$, 
+             0, $CellContext`tmax$$}, PlotRange -> All, 
+            PlotLegends -> {"H", "Z", "R"}, 
+            PlotStyle -> {{Blue, Thick}, {Red, Thick}, {Purple, Thick}}, 
+            Frame -> True, 
+            FrameLabel -> {
+             "t", "H, Z, R"}], $CellContext`phasePlotHZ$, \
+$CellContext`phasePlotZR$, 
+           Show[$CellContext`parameterSpace$, 
+            
+            ListPlot[{{$CellContext`finalDetJ$, $CellContext`finalTraceJ$}}, 
+             PlotStyle -> PointSize[Large]], Frame -> True, 
+            FrameLabel -> {"Determinant", "Trace"}]}]], 
+      "Specifications" :> {{{$CellContext`c$$, 1., "c"}, 0, 5, 
+         0.01}, {{$CellContext`gamma$$, 0.5, "gamma"}, 0, 5, 0.01}, 
+        Delimiter, {{$CellContext`H0$$, 1, "H0"}, 0, 10, 
+         0.1}, {{$CellContext`Z0$$, 0.2, "Z0"}, 0, 10, 
+         0.1}, {{$CellContext`R0$$, 0.5, "R0"}, 0, 1, 0.01}, 
+        Delimiter, {{$CellContext`tmax$$, 50, "tmax"}, 1, 500, 1}, 
+        Delimiter, {{$CellContext`hMaxPlot$$, 2, "H plot max"}, 0.1, 10, 
+         0.1}, {{$CellContext`zMaxPlot$$, 2, "Z plot max"}, 0.1, 10, 
+         0.1}, {{$CellContext`rMaxPlot$$, 1, "R plot max"}, 0.1, 2, 0.01}}, 
+      "Options" :> {}, "DefaultOptions" :> {}],
+     ImageSizeCache->{535., {358.63403309800196`, 364.36596690199804`}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{
+  3.974287606544132*^9, 3.974293067283228*^9, 3.974293802231287*^9, 
+   3.974296040833725*^9, {3.974297153658886*^9, 3.974297168179994*^9}, 
+   3.974297484592884*^9, {3.974298052519209*^9, 3.974298052527788*^9}, {
+   3.974298241990223*^9, 3.974298250169523*^9}},
+ CellLabel->"Out[17]=",ExpressionUUID->"04a9c387-804b-474f-9991-60aafb293494"]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.9739382948389606`*^9, 3.973938321804062*^9}, {
+  3.974293096600275*^9, 3.974293099624201*^9}, {3.974294212857731*^9, 
+  3.97429421350375*^9}},ExpressionUUID->"6684b420-1557-bf4b-a23b-\
+8a99fe9669e0"],
+
+Cell[CellGroupData[{
+
+Cell["Eigen Analysis", "Subtitle",
+ CellChangeTimes->{{3.942654654793048*^9, 
+  3.942654660767187*^9}},ExpressionUUID->"5638177f-bfab-4185-b6a3-\
+d4098aef7e6f"],
+
+Cell["\<\
+Define the Jacobian for the system, specify the fixed points and find the \
+eigenvalues at each.\
+\>", "Text",
+ CellChangeTimes->{{3.9427423579957733`*^9, 3.94274239542001*^9}, {
+  3.974450232040224*^9, 
+  3.974450235021288*^9}},ExpressionUUID->"54597e6d-a678-4646-b735-\
+a9f3295a97a7"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"Jacobsn", " ", "for", " ", "system"}], " ", "*)"}], "\n", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"jMatrix", " ", "=", " ", 
+     RowBox[{"{", "\n", "   ", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"-", 
+           RowBox[{"(", 
+            RowBox[{"1", " ", "-", " ", "R"}], ")"}]}], " ", "Z"}], ",", 
+         "        ", 
+         RowBox[{
+          RowBox[{"-", 
+           RowBox[{"(", 
+            RowBox[{"1", " ", "-", " ", "R"}], ")"}]}], " ", "H"}], ",", 
+         "      ", 
+         RowBox[{"H", " ", "Z"}]}], "}"}], ",", "\n", "   ", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"1", " ", "-", " ", "R"}], ")"}], " ", "Z"}], ",", 
+         "          ", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"1", " ", "-", " ", "R"}], ")"}], " ", "H"}], ",", "     ", 
+         RowBox[{
+          RowBox[{"-", "H"}], " ", "Z"}]}], "}"}], ",", "\n", "   ", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"c", " ", 
+           RowBox[{"(", 
+            RowBox[{"1", " ", "-", " ", "R"}], ")"}]}], " ", "-", " ", 
+          "gamma"}], ",", "      ", "0", ",", "         ", 
+         RowBox[{
+          RowBox[{"-", "c"}], " ", "H"}]}], "}"}]}], "\n", "}"}]}], ";"}], 
+   "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"--", 
+       RowBox[{"--", 
+        RowBox[{"--", 
+         RowBox[{"--", " ", "Fixed"}]}]}]}], " ", "Point", " ", "1"}], ":", 
+     " ", 
+     RowBox[{"Extinction", " ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"family", " ", "--"}], "--"}], "--"}], "--"}]}]}], " ", 
+    "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"fixedPoint1", " ", "=", " ", 
+     RowBox[{"{", 
+      RowBox[{"H", " ", "->", " ", "0"}], "}"}]}], ";"}], "\n", "\n", 
+   RowBox[{
+    RowBox[{"jacFP1", " ", "=", " ", 
+     RowBox[{"jMatrix", " ", "/.", " ", "fixedPoint1"}]}], ";"}], "\n", 
+   RowBox[{"eigFP1", " ", "=", " ", 
+    RowBox[{"Eigenvalues", "[", "jacFP1", "]"}]}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Output", " ", "for", " ", "documentation"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{
+    "fixedPoint1Interpretation", " ", "=", " ", "\n", " ", 
+     "\"\<Extinction equilibrium: (H,Z,R) = (0, Z, R) for any Z and R\>\""}], 
+    ";"}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"--", 
+       RowBox[{"--", 
+        RowBox[{"--", 
+         RowBox[{"--", " ", "Fixed"}]}]}]}], " ", "Point", " ", "2"}], ":", 
+     " ", 
+     RowBox[{"Survival", " ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"family", " ", "--"}], "--"}], "--"}], "--"}]}]}], " ", 
+    "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"fixedPoint2", " ", "=", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"Z", " ", "->", " ", "0"}], ",", " ", 
+       RowBox[{"R", " ", "->", " ", 
+        RowBox[{"1", " ", "-", " ", 
+         RowBox[{"gamma", "/", "c"}]}]}]}], "}"}]}], ";"}], "\n", "\n", 
+   RowBox[{
+    RowBox[{"jacFP2", " ", "=", " ", 
+     RowBox[{"jMatrix", " ", "/.", " ", "fixedPoint2"}]}], ";"}], "\n", 
+   RowBox[{"eigFP2", " ", "=", " ", 
+    RowBox[{"Eigenvalues", "[", "jacFP2", "]"}]}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Output", " ", "for", " ", "documentation"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{
+    "fixedPoint2Interpretation", " ", "=", " ", "\n", " ", 
+     "\"\<Survival equilibrium: (H,Z,R) = (H, 0, 1 - \[Gamma]/c) for any H>0 \
+(requires \[Gamma]<c)\>\""}], ";"}], "\n"}]}]], "Code",
+ CellChangeTimes->{{3.942647657815558*^9, 3.94264766181458*^9}, {
+   3.942653745900143*^9, 3.942653750286291*^9}, {3.942653844864902*^9, 
+   3.942653932221984*^9}, {3.942653997003188*^9, 3.942654030614083*^9}, {
+   3.942654093864226*^9, 3.942654100471195*^9}, {3.942654433757696*^9, 
+   3.942654444103928*^9}, {3.942654565437638*^9, 3.942654582602116*^9}, {
+   3.942721990830193*^9, 3.942722015381347*^9}, {3.942723182490278*^9, 
+   3.942723258206894*^9}, {3.942741740708407*^9, 3.942741769572427*^9}, {
+   3.942741829139409*^9, 3.942741829704959*^9}, {3.942742179158124*^9, 
+   3.942742184175264*^9}, {3.974287597515917*^9, 3.974287651507778*^9}, 
+   3.974295574317087*^9, {3.974298790007866*^9, 3.9742987916265945`*^9}, {
+   3.974298936558817*^9, 3.974298990090601*^9}, {3.9742994449992485`*^9, 
+   3.9742994456393585`*^9}, {3.9742996193221607`*^9, 3.9742996493744526`*^9}},
+ CellLabel->"In[80]:=",ExpressionUUID->"641b2abc-ccb7-4968-82c2-7f860ddf323f"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"0", ",", "0", ",", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"-", "1"}], "+", "R"}], ")"}], " ", "Z"}]}], "}"}]], "Output",
+ CellChangeTimes->{{3.942723225044611*^9, 3.942723259061513*^9}, {
+   3.942741762388728*^9, 3.942741772160788*^9}, 3.942741831066205*^9, 
+   3.942742186753119*^9, 3.973506392123593*^9, {3.974287607334711*^9, 
+   3.974287655687117*^9}, 3.9742938028430996`*^9, 3.974298242402256*^9, {
+   3.974298945137598*^9, 3.974298992142933*^9}, 3.974299447927368*^9, {
+   3.9742995023665943`*^9, 3.9742995120133324`*^9}, {3.974299622888935*^9, 
+   3.9742996520269966`*^9}},
+ CellLabel->"Out[83]=",ExpressionUUID->"907db442-fe6d-8643-8e57-1f28773e1465"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"0", ",", 
+   RowBox[{
+    RowBox[{"-", "c"}], " ", "H"}], ",", 
+   FractionBox[
+    RowBox[{"gamma", " ", "H"}], "c"]}], "}"}]], "Output",
+ CellChangeTimes->{{3.942723225044611*^9, 3.942723259061513*^9}, {
+   3.942741762388728*^9, 3.942741772160788*^9}, 3.942741831066205*^9, 
+   3.942742186753119*^9, 3.973506392123593*^9, {3.974287607334711*^9, 
+   3.974287655687117*^9}, 3.9742938028430996`*^9, 3.974298242402256*^9, {
+   3.974298945137598*^9, 3.974298992142933*^9}, 3.974299447927368*^9, {
+   3.9742995023665943`*^9, 3.9742995120133324`*^9}, {3.974299622888935*^9, 
+   3.974299652028267*^9}},
+ CellLabel->"Out[87]=",ExpressionUUID->"75081bf9-a291-0846-bfe0-0cd9c846c5c3"]
+}, Open  ]]
+}, Open  ]],
+
+Cell["", "Subtitle",
+ CellChangeTimes->{{3.942647657815558*^9, 3.94264766181458*^9}, 
+   3.974292378474619*^9},ExpressionUUID->"118c48cb-a9dd-4c2d-949e-\
+2b99b33098bf"]
+}, Open  ]]
+},
+WindowSize->{Full, Full},
+WindowMargins->{{-1556, Automatic}, {Automatic, -39}},
+Magnification:>1. Inherited,
+FrontEndVersion->"14.0 for Microsoft Windows (64-bit) (December 12, 2023)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"062f5583-3f78-45da-a3f6-35f4f2b87a9f"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[576, 22, 283, 5, 98, "Title",ExpressionUUID->"d1ad6ba4-f57b-4596-bc28-d00e48d9a50d"],
+Cell[862, 29, 391, 8, 53, "Subtitle",ExpressionUUID->"80faa2d1-17c8-4679-a3e3-13b219300588"],
+Cell[1256, 39, 576, 10, 58, "Text",ExpressionUUID->"8bc687ed-1191-444f-ba64-2d3628c7f229"],
+Cell[CellGroupData[{
+Cell[1857, 53, 19486, 437, 2439, "Code",ExpressionUUID->"a54f7314-71ab-4641-8904-2e99c7a8588b"],
+Cell[21346, 492, 9383, 173, 742, "Output",ExpressionUUID->"04a9c387-804b-474f-9991-60aafb293494"]
+}, Open  ]],
+Cell[30744, 668, 248, 4, 28, "Input",ExpressionUUID->"6684b420-1557-bf4b-a23b-8a99fe9669e0"],
+Cell[CellGroupData[{
+Cell[31017, 676, 160, 3, 53, "Subtitle",ExpressionUUID->"5638177f-bfab-4185-b6a3-d4098aef7e6f"],
+Cell[31180, 681, 296, 7, 35, "Text",ExpressionUUID->"54597e6d-a678-4646-b735-a9f3295a97a7"],
+Cell[CellGroupData[{
+Cell[31501, 692, 4589, 119, 507, "Code",ExpressionUUID->"641b2abc-ccb7-4968-82c2-7f860ddf323f"],
+Cell[36093, 813, 719, 14, 32, "Output",ExpressionUUID->"907db442-fe6d-8643-8e57-1f28773e1465"],
+Cell[36815, 829, 715, 14, 48, "Output",ExpressionUUID->"75081bf9-a291-0846-bfe0-0cd9c846c5c3"]
+}, Open  ]]
+}, Open  ]],
+Cell[37557, 847, 168, 3, 53, "Subtitle",ExpressionUUID->"118c48cb-a9dd-4c2d-949e-2b99b33098bf"]
+}, Open  ]]
+}
+]
+*)
+
