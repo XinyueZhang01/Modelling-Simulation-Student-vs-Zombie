@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     67775,       1537]
-NotebookOptionsPosition[     66067,       1499]
-NotebookOutlinePosition[     66473,       1515]
-CellTagsIndexPosition[     66430,       1512]
+NotebookDataLength[     68217,       1544]
+NotebookOptionsPosition[     66415,       1505]
+NotebookOutlinePosition[     66821,       1521]
+CellTagsIndexPosition[     66778,       1518]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -26,18 +26,24 @@ Cell["Fight back!", "Title",
   3.974445284618704*^9}},ExpressionUUID->"350dfeb8-3cd3-6140-ad6f-\
 c53e136861da"],
 
-Cell["\<\
-In this scenario, human starts fighting back to the zombies. 
+Cell["In this scenario, human starts fighting back the zombies. ", "Subtitle",
+ CellChangeTimes->{{3.974442968325136*^9, 3.97444297947538*^9}, {
+  3.9744452742328663`*^9, 3.9744453045646152`*^9}, {3.9744475181313953`*^9, 
+  3.9744475190392113`*^9}, {3.974448917083847*^9, 
+  3.9744489306840687`*^9}},ExpressionUUID->"483198aa-88aa-2b48-81c3-\
+490808af943f"],
 
+Cell["\<\
 This interactive tool numerically solves the dimensionless H\[Dash]Z\[Dash]R \
 system, computes its Jacobian and stability indicators at the final state, \
-and visualises the trajectories through time series, phase portraits, and \
+and visualizes the trajectories through time series, phase portraits, and \
 trace\[Dash]determinant plots.\
 \>", "Text",
  CellChangeTimes->{{3.974442968325136*^9, 3.97444297947538*^9}, {
   3.9744452742328663`*^9, 3.9744453045646152`*^9}, {3.9744475181313953`*^9, 
-  3.9744475190392113`*^9}},ExpressionUUID->"483198aa-88aa-2b48-81c3-\
-490808af943f"],
+  3.9744475190392113`*^9}, {3.974448917083847*^9, 
+  3.9744489237285175`*^9}},ExpressionUUID->"0f328fa9-1ae8-554e-92fc-\
+28c80588038f"],
 
 Cell[CellGroupData[{
 
@@ -1516,26 +1522,27 @@ CellTagsIndex->{}
 Notebook[{
 Cell[CellGroupData[{
 Cell[580, 22, 204, 4, 98, "Title",ExpressionUUID->"350dfeb8-3cd3-6140-ad6f-c53e136861da"],
-Cell[787, 28, 577, 11, 104, "Text",ExpressionUUID->"483198aa-88aa-2b48-81c3-490808af943f"],
+Cell[787, 28, 357, 5, 53, "Subtitle",ExpressionUUID->"483198aa-88aa-2b48-81c3-490808af943f"],
+Cell[1147, 35, 565, 10, 58, "Text",ExpressionUUID->"0f328fa9-1ae8-554e-92fc-28c80588038f"],
 Cell[CellGroupData[{
-Cell[1389, 43, 17669, 414, 2404, "Code",ExpressionUUID->"f755393e-c914-1642-9955-04db6a936f44"],
-Cell[19061, 459, 9382, 172, 662, "Output",ExpressionUUID->"b4d08018-5f35-c34d-83cd-5c079e87e94c"]
+Cell[1737, 49, 17669, 414, 2404, "Code",ExpressionUUID->"f755393e-c914-1642-9955-04db6a936f44"],
+Cell[19409, 465, 9382, 172, 662, "Output",ExpressionUUID->"b4d08018-5f35-c34d-83cd-5c079e87e94c"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[28480, 636, 222, 4, 53, "Subtitle",ExpressionUUID->"16447564-d09a-3545-8215-5dfd0064ba61"],
-Cell[28705, 642, 303, 7, 35, "Text",ExpressionUUID->"5e5cfd13-cedf-7c41-b2f6-490eee7219ce"],
+Cell[28828, 642, 222, 4, 53, "Subtitle",ExpressionUUID->"16447564-d09a-3545-8215-5dfd0064ba61"],
+Cell[29053, 648, 303, 7, 35, "Text",ExpressionUUID->"5e5cfd13-cedf-7c41-b2f6-490eee7219ce"],
 Cell[CellGroupData[{
-Cell[29033, 653, 2783, 76, 296, "Code",ExpressionUUID->"9fca6802-422a-584a-9051-7699b1a4ebce"],
-Cell[31819, 731, 302, 8, 32, "Output",ExpressionUUID->"4a3e074b-e301-c04c-9e4c-851be61e55a5"],
-Cell[32124, 741, 416, 13, 48, "Output",ExpressionUUID->"e0333641-42c4-e045-bd99-f7a9fe78c7f5"]
+Cell[29381, 659, 2783, 76, 296, "Code",ExpressionUUID->"9fca6802-422a-584a-9051-7699b1a4ebce"],
+Cell[32167, 737, 302, 8, 32, "Output",ExpressionUUID->"4a3e074b-e301-c04c-9e4c-851be61e55a5"],
+Cell[32472, 747, 416, 13, 48, "Output",ExpressionUUID->"e0333641-42c4-e045-bd99-f7a9fe78c7f5"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[32589, 760, 221, 4, 53, "Subtitle",ExpressionUUID->"b3347395-0fa4-9441-9fa5-187238496d10"],
-Cell[32813, 766, 461, 10, 58, "Text",ExpressionUUID->"da42d805-4eb2-1341-9521-a7f6108188fd"],
+Cell[32937, 766, 221, 4, 53, "Subtitle",ExpressionUUID->"b3347395-0fa4-9441-9fa5-187238496d10"],
+Cell[33161, 772, 461, 10, 58, "Text",ExpressionUUID->"da42d805-4eb2-1341-9521-a7f6108188fd"],
 Cell[CellGroupData[{
-Cell[33299, 780, 7755, 180, 1139, "Code",ExpressionUUID->"e1771734-304c-6548-b7d0-554f8c844b08"],
-Cell[41057, 962, 24970, 532, 252, "Output",ExpressionUUID->"e768c70a-84c3-4645-a5aa-ef039bbe8c19"]
+Cell[33647, 786, 7755, 180, 1139, "Code",ExpressionUUID->"e1771734-304c-6548-b7d0-554f8c844b08"],
+Cell[41405, 968, 24970, 532, 252, "Output",ExpressionUUID->"e768c70a-84c3-4645-a5aa-ef039bbe8c19"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]
