@@ -1,4 +1,4 @@
-# 🧟‍♂️ Human–Zombie Dynamic Systems: Simulation & Stability Analysis
+# 🧟‍♂️ Student–Zombie Dynamic Systems: Simulation & Stability Analysis
 
 This repository contains three Mathematica notebooks that simulate and analyse nonlinear population dynamics between humans, zombies, and resources under different scenario assumptions. Each file includes numerical simulation, phase-space visualisation, and Jacobian-based stability analysis.
 
